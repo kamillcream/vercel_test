@@ -14,7 +14,7 @@
             method: "POST",
             credentials: "include", // ✅ 쿠키 및 인증 포함
             headers: {
-                "Authorization": `Bearer ${token}`, // ✅ Authorization 헤더 추가
+                "Authorization": `Bearer eyJhbGciOiJIUzI1NiJ9.eyJnb29nbGVJZCI6ImdsaXR0NTM4NEBnbWFpbC5jb20iLCJuYW1lIjoi67CV7KeE7JiBIiwiaWF0IjoxNzM5NDUyMTU2LCJleHAiOjE3Mzk0NTM5NTZ9.rdqr_TxLamDP68EYwMn0AvFH2ZPt8YJKeWT6o7PfKao`, // ✅ Authorization 헤더 추가
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
