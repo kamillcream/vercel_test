@@ -4,37 +4,36 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Reservation API Request</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
     async function sendRequest() {
-    const url = "https://blaybus-glowup.com/reservation/create";
-    const token = "eyJhbGciOiJIUzI1NiJ9.eyJnb29nbGVJZCI6ImthbWlsbGNyZWFtMUBnbWFpbC5jb20iLCJuYW1lIjoi67CV7KeE7JiBIiwiaWF0IjoxNzM5NDQ5MDE5LCJleHAiOjE3Mzk0NTA4MTl9.U7zgFS82p3lAy_fLkWMWU0_rCgzlfbuvV-hpN8QtOK4";
+        const url = "https://blaybus-glowup.com/reservation/create";
+        const token = localStorage.getItem("access_token"); // ✅ 로컬스토리지에서 JWT 가져오기
 
-    try {
-        const response = await fetch(url, {
-            method: "POST",
-            credentials: "include", // ✅ 쿠키 및 인증 포함
-            headers: {
-                "Authorization": `Bearer eyJhbGciOiJIUzI1NiJ9.eyJnb29nbGVJZCI6ImdsaXR0NTM4NEBnbWFpbC5jb20iLCJuYW1lIjoi67CV7KeE7JiBIiwiaWF0IjoxNzM5NDUyMTU2LCJleHAiOjE3Mzk0NTM5NTZ9.rdqr_TxLamDP68EYwMn0AvFH2ZPt8YJKeWT6o7PfKao`, // ✅ Authorization 헤더 추가
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                name: "테스트 예약",
-                date: "2025-02-12",
-                time: "14:00",
-                participants: 3
-            })
-        });
+        try {
+            const response = await axios.post(url,
+                {
+                    name: "테스트 예약",
+                    date: "2025-02-12",
+                    time: "14:00",
+                    participants: 3
+                },
+                {
+                    withCredentials: true, // ✅ 쿠키 포함
+                    headers: {
+                        "Authorization": `Bearer eyJhbGciOiJIUzI1NiJ9.eyJnb29nbGVJZCI6ImdsaXR0NTM4NEBnbWFpbC5jb20iLCJuYW1lIjoi67CV7KeE7JiBIiwiaWF0IjoxNzM5NDUyMTU2LCJleHAiOjE3Mzk0NTM5NTZ9.rdqr_TxLamDP68EYwMn0AvFH2ZPt8YJKeWT6o7PfKao`, // ✅ JWT 포함
+                        "Content-Type": "application/json"
+                    }
+                }
+            );
 
-        if (!response.ok) {
-            throw new Error(`HTTP Error ${response.status}: ${response.statusText}`);
+            console.log("✅ Response Data:", response.data);
+            document.getElementById("response").innerText = JSON.stringify(response.data, null, 2);
+        } catch (error) {
+            console.error("🚨 Axios Error:", error.response || error.message);
+            document.getElementById("response").innerText = `Error: ${error.response ? error.response.data : error.message}`;
         }
-
-        const data = await response.json();
-        document.getElementById("response").innerText = JSON.stringify(data, null, 2);
-    } catch (error) {
-        document.getElementById("response").innerText = `Error: ${error.message}`;
     }
-}
   </script>
 </head>
 <body>
