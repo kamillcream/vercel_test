@@ -3,18 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Redirecting to Localhost</title>
-  <script>
-    window.onload = function () {
-        //  쿠키 값 가져오기
-        const cookies = document.cookie;
-
-        //  로컬호스트로 이동
-        window.location.href = "http://localhost:5173/main";
-    };
-  </script>
+  <title>Redirecting...</title>
 </head>
 <body>
-<h1>로그인 성공! 로컬 개발 환경으로 이동 중...</h1>
+<script>
+  //  쿠키에서 특정 값을 가져오는 함수
+  function getCookie(name) {
+      const cookies = document.cookie.split("; ");
+      for (let cookie of cookies) {
+          const [key, value] = cookie.split("=");
+          if (key === name) return value;
+      }
+      return "";
+  }
+
+  //  쿠키에서 토큰 가져오기
+  const accessToken = getCookie("access_token");
+  const googleOauthToken = getCookie("google_oauth_token");
+  const refreshToken = getCookie("refresh_token");
+
+  //  로컬호스트로 이동 (토큰을 URL 파라미터에 포함)
+  window.location.href = http://localhost:5173/main?access_token=${accessToken}&google_oauth_token=${googleOauthToken}&refresh_token=${refreshToken};
+</script>
 </body>
 </html>
