@@ -7,30 +7,30 @@
 </head>
 <body>
 <script>
-  // ✅ 쿠키에서 특정 값을 가져오는 함수
+  //  쿠키에서 특정 값을 가져오는 함수
   function getCookie(name) {
       const cookies = document.cookie.split("; ");
       for (let cookie of cookies) {
           const [key, value] = cookie.split("=");
-          if (key === name) return decodeURIComponent(value); // ✅ URL 디코딩
+          if (key === name) return decodeURIComponent(value); //  URL 디코딩
       }
       return "";
   }
 
-  // ✅ 쿠키에서 토큰 가져오기
+  //  쿠키에서 토큰 가져오기
   const accessToken = getCookie("access_token");
   const googleOauthToken = getCookie("google_oauth_token");
   const refreshToken = getCookie("refresh_token");
 
-  // ✅ URL 파라미터로 인코딩
+  //  URL 파라미터로 인코딩
   const queryParams = new URLSearchParams({
       access_token: accessToken,
       google_oauth_token: googleOauthToken,
       refresh_token: refreshToken
-  }).toString();
+  }).toString(); // URLSearchParams를 사용해 안전하게 쿼리 파라미터 처리
 
-  // ✅ 로컬호스트로 이동 (URL 인코딩된 토큰 포함)
-  window.location.href = http://localhost:5173/main?${queryParams};
+  //  로컬호스트로 이동 (URL 인코딩된 토큰 포함)
+  window.location.href = http://localhost:5173/main?${queryParams}; // 백틱으로 문자열 템플릿 사용
 </script>
 </body>
 </html>
