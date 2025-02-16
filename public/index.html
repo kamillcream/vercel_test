@@ -3,46 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reservation API Request</title>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <title>Redirecting to Localhost</title>
   <script>
-    async function sendRequest() {
-        const url = "https://blaybus-glowup.com/reservation/create";
+    window.onload = function () {
+        //  쿠키 값 가져오기
+        const cookies = document.cookie;
 
-        try {
-            const response = await axios.post(url,
-                {
-                    name: "테스트 예약",
-                    date: "2025-02-12",
-                    time: "14:00",
-                    participants: 3
-                },
-                {
-                    withCredentials: true, // ✅ 쿠키 포함
-                    headers: {
-                        "Authorization": `Bearer eyJhbGciOiJIUzI1NiJ9.eyJnb29nbGVJZCI6ImdsaXR0NTM4NEBnbWFpbC5jb20iLCJuYW1lIjoi67CV7KeE7JiBIiwiaWF0IjoxNzM5NDcwNjU0LCJleHAiOjE3Mzk0NzI0NTR9.p--IeOPhmcR-urHugv_lueoyYGBl6UvRSdFGMYAWgJM`, // ✅ JWT 포함
-                        "Content-Type": "application/json"
-                    }
-                }
-            );
-
-            console.log("✅ Response Data:", response.data);
-            document.getElementById("response").innerText = JSON.stringify(response.data, null, 2);
-        } catch (error) {
-            console.error("🚨 Axios Error:", error.response || error.message);
-            document.getElementById("response").innerText = `Error: ${error.response ? error.response.data : error.message}`;
-        }
-    }
+        //  로컬호스트로 이동
+        window.location.href = "http://localhost:5173/main";
+    };
   </script>
 </head>
 <body>
-
-<h1>Reservation API Request</h1>
-<p>버튼을 클릭하면 예약 요청을 보냅니다.</p>
-<button onclick="sendRequest()">예약 요청 보내기</button>
-
-<h2>Response:</h2>
-<pre id="response"></pre>
-
+<h1>로그인 성공! 로컬 개발 환경으로 이동 중...</h1>
 </body>
 </html>
