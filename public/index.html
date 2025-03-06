@@ -40,7 +40,7 @@
   }
 
   function connect() {
-      const socket = new SockJS("http://127.0.0.1:8080/document"); // WebSocket 엔드포인트
+      const socket = new SockJS("http://203.237.172.132:8080/document"); // WebSocket 엔드포인트
       stompClient = Stomp.over(socket);
 
       stompClient.connect({}, function(frame) {
