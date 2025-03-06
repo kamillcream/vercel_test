@@ -11,7 +11,7 @@
 <h2>STOMP WebSocket 테스트</h2>
 
 <label>채널 ID:</label>
-<input type="text" id="channelId" value="room1">
+<input type="text" id="documentId" value="room1">
 <br><br>
 
 <button onclick="connect()">🔗 STOMP 연결</button>
@@ -58,17 +58,17 @@
   }
 
   function subscribe() {
-      const channelId = document.getElementById("channelId").value;
+      const documentId = document.getElementById("documentId").value;
       if (!stompClient || !stompClient.connected) {
           logMessage("🚨 먼저 STOMP에 연결하세요!");
           return;
       }
 
-      subscription = stompClient.subscribe(`/sub/chat/${channelId}`, function(message) {
+      subscription = stompClient.subscribe(`/sub/chat/${documentId}`, function(message) {
           logMessage("📨 받은 메시지: " + message.body);
       });
 
-      logMessage(`👀 /sub/chat/${channelId} 구독 시작`);
+      logMessage(`👀 /sub/chat/${documentId} 구독 시작`);
   }
 
   function unsubscribe() {
@@ -79,7 +79,7 @@
   }
 
   function sendMessage() {
-      const channelId = document.getElementById("channelId").value;
+      const documentId = document.getElementById("documentId").value;
       const message = document.getElementById("messageInput").value;
 
       if (!stompClient || !stompClient.connected) {
@@ -88,7 +88,7 @@
       }
 
       const payload = {
-          channelId: channelId,
+          documentId: documentId,
           message: message
       };
 
