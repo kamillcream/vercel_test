@@ -40,7 +40,7 @@
   }
 
   function connect() {
-      const socket = new SockJS("https://34.70.26.180:8443/document"); // WebSocket 엔드포인트
+      const socket = new SockJS("https://blaybus-glowup.com:8443/document"); // WebSocket 엔드포인트
       stompClient = Stomp.over(socket);
 
       stompClient.connect({}, function(frame) {
