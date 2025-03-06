@@ -1,36 +1,100 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Redirecting...</title>
+  <title>STOMP WebSocket 테스트</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </head>
 <body>
+<h2>STOMP WebSocket 테스트</h2>
+
+<label>채널 ID:</label>
+<input type="text" id="channelId" value="room1">
+<br><br>
+
+<button onclick="connect()">🔗 STOMP 연결</button>
+<button onclick="disconnect()">❌ 연결 종료</button>
+<br><br>
+
+<button onclick="subscribe()">👀 채널 구독</button>
+<button onclick="unsubscribe()">🚫 구독 취소</button>
+<br><br>
+
+<label>메시지 입력:</label>
+<input type="text" id="messageInput" placeholder="보낼 메시지 입력">
+<button onclick="sendMessage()">📩 메시지 전송</button>
+
+<h3>📩 메시지 로그:</h3>
+<div id="messageLog" style="border: 1px solid #ccc; padding: 10px; width: 400px; height: 200px; overflow-y: scroll;"></div>
+
 <script>
-  //  쿠키에서 특정 값을 가져오는 함수
-  function getCookie(name) {
-      const cookies = document.cookie.split("; ");
-      for (let cookie of cookies) {
-          const [key, value] = cookie.split("=");
-          if (key === name) return decodeURIComponent(value); //  URL 디코딩
-      }
-      return "";
+  let stompClient = null;
+  let subscription = null;
+
+  function logMessage(message) {
+      const logDiv = document.getElementById("messageLog");
+      logDiv.innerHTML += `<p>${message}</p>`;
+      logDiv.scrollTop = logDiv.scrollHeight; // 자동 스크롤
   }
 
-  //  쿠키에서 토큰 가져오기
-  const accessToken = getCookie("access_token");
-  const googleOauthToken = getCookie("google_oauth_token");
-  const refreshToken = getCookie("refresh_token");
+  function connect() {
+      const socket = new SockJS("http://localhost:8080/document"); // WebSocket 엔드포인트
+      stompClient = Stomp.over(socket);
 
-  //  URL 파라미터로 인코딩
-  const queryParams = new URLSearchParams({
-      access_token: accessToken,
-      google_oauth_token: googleOauthToken,
-      refresh_token: refreshToken
-  }).toString(); // URLSearchParams를 사용해 안전하게 쿼리 파라미터 처리
+      stompClient.connect({}, function(frame) {
+          logMessage("✅ STOMP 연결 성공: " + frame);
+      }, function(error) {
+          logMessage("❌ 연결 실패: " + error);
+      });
+  }
 
-  //  로컬호스트로 이동 (URL 인코딩된 토큰 포함)
-  window.location.href = http://localhost:5173/main?${queryParams}; // 백틱으로 문자열 템플릿 사용
+  function disconnect() {
+      if (stompClient !== null) {
+          stompClient.disconnect();
+          logMessage("🔌 연결 종료");
+      }
+  }
+
+  function subscribe() {
+      const channelId = document.getElementById("channelId").value;
+      if (!stompClient || !stompClient.connected) {
+          logMessage("🚨 먼저 STOMP에 연결하세요!");
+          return;
+      }
+
+      subscription = stompClient.subscribe(`/sub/chat/${channelId}`, function(message) {
+          logMessage("📨 받은 메시지: " + message.body);
+      });
+
+      logMessage(`👀 /sub/chat/${channelId} 구독 시작`);
+  }
+
+  function unsubscribe() {
+      if (subscription) {
+          subscription.unsubscribe();
+          logMessage("🚫 구독 취소 완료");
+      }
+  }
+
+  function sendMessage() {
+      const channelId = document.getElementById("channelId").value;
+      const message = document.getElementById("messageInput").value;
+
+      if (!stompClient || !stompClient.connected) {
+          logMessage("🚨 먼저 STOMP에 연결하세요!");
+          return;
+      }
+
+      const payload = {
+          channelId: channelId,
+          message: message
+      };
+
+      stompClient.send("/pub/chat/message", {}, JSON.stringify(payload));
+      logMessage(`📩 메시지 전송: ${JSON.stringify(payload)}`);
+  }
 </script>
 </body>
 </html>
