@@ -73,9 +73,13 @@
       }
 
       // ✅ 구독 요청
-      subscription = stompClient.subscribe(`/sub/chat/${documentId}`, function(message) {
-          logMessage("📨 받은 메시지: " + message.body);
-      });
+      subscription = stompClient.subscribe(
+        `/sub/chat/${documentId}`,
+        function(message) {
+            logMessage("📨 받은 메시지: " + message.body);
+        },
+        { Authorization: `${token}` } // 헤더 추가
+    );
 
       logMessage(`👀 /sub/chat/${documentId} 구독 시작`);
   }
@@ -102,7 +106,7 @@
       };
 
       // ✅ 메시지 전송 시에도 토큰 포함
-      stompClient.send("/pub/chat/message", { Authorization: `Bearer ${token}` }, JSON.stringify(payload));
+      stompClient.send("/pub/chat/message", { Authorization: `${token}` }, JSON.stringify(payload));
       logMessage(`📩 메시지 전송: ${JSON.stringify(payload)}`);
   }
 </script>
