@@ -33,8 +33,8 @@
   let stompClient = null;
   let subscription = null;
 
-  // ✅ JWT 토큰 설정 (로그인 없이 직접 사용)
-  const token = "eyJhbGciOiJIUzI1NiJ9.eyJjYXRlZ29yeSI6ImFjY2VzcyIsImVtYWlsIjoiZ2xpdHQxMTIxQG5hdmVyLmNvbSIsInJvbGUiOiJST0xFX01BTkFHRVIiLCJpYXQiOjE3NDEzMzc2NTksImV4cCI6MTc0MTMzOTQ1OX0.a24JVCRrOttFCwg6M3RtI42DhNPwav9JxvR1kjhtNSQ";
+  // ✅ JWT 토큰 (직접 하드코딩)
+  const token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJjYXRlZ29yeSI6ImFjY2VzcyIsImVtYWlsIjoia2FtaWxsY3JlYW0xQGdtYWlsLmNvbSIsInJvbGUiOiJST0xFX01BTkFHRVIiLCJpYXQiOjE3NDEzNTk2MzUsImV4cCI6MTc0MTM2MTQzNX0.FWQm_j-JSaifZV6XJV0L9wl2ZOZAAXkFFR3hceBL_hA";
 
   function logMessage(message) {
       const logDiv = document.getElementById("messageLog");
@@ -47,11 +47,15 @@
       stompClient = Stomp.over(socket);
 
       // ✅ STOMP 연결 시 토큰 포함
-      stompClient.connect({ Authorization: `Bearer ${token}` }, function(frame) {
-          logMessage("✅ STOMP 연결 성공: " + frame);
-      }, function(error) {
-          logMessage("❌ 연결 실패: " + error);
-      });
+      stompClient.connect(
+          { Authorization: `Bearer ${token}` },
+          function(frame) {
+              logMessage("✅ STOMP 연결 성공: " + frame);
+          },
+          function(error) {
+              logMessage("❌ 연결 실패: " + error);
+          }
+      );
   }
 
   function disconnect() {
@@ -68,7 +72,7 @@
           return;
       }
 
-      // ✅ 구독 시에도 헤더 포함 (필요한 경우)
+      // ✅ 구독 요청
       subscription = stompClient.subscribe(`/sub/chat/${documentId}`, function(message) {
           logMessage("📨 받은 메시지: " + message.body);
       });
