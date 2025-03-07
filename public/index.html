@@ -48,7 +48,7 @@
 
       // ✅ STOMP 연결 시 토큰 포함
       stompClient.connect(
-          { Authorization: `Bearer ${token}` },
+          { Authorization: `${token}` },
           function(frame) {
               logMessage("✅ STOMP 연결 성공: " + frame);
           },
